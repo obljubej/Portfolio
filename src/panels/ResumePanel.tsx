@@ -10,6 +10,16 @@ export function ResumePanel() {
         A two-page overview of my experience, education, and projects.
       </p>
 
+      {/* Inline PDF viewer */}
+      <div className="rounded-lg overflow-hidden border border-paper-300 dark:border-paper-500 shadow-sm bg-white dark:bg-paper-100">
+        <iframe
+          src={`${RESUME_PATH}#toolbar=0&navpanes=0&scrollbar=1&view=FitH&zoom=page-width`}
+          title="Resume"
+          className="w-full bg-white"
+          style={{ height: '72vh', minHeight: '520px' }}
+        />
+      </div>
+
       {/* Download button */}
       <a
         href={RESUME_PATH}
@@ -42,19 +52,6 @@ export function ResumePanel() {
         Download PDF
       </a>
 
-      {/* Inline PDF viewer */}
-      <div className="rounded-lg overflow-hidden border border-paper-200 shadow-sm">
-        <iframe
-          src={`${RESUME_PATH}#view=FitH`}
-          title="Resume"
-          className="w-full"
-          style={{ height: '65vh', minHeight: '400px' }}
-        />
-      </div>
-
-      <p className="text-xs text-paper-400 font-mono text-center">
-        // Place resume at portfolio/public/resume.pdf
-      </p>
     </div>
   );
 }

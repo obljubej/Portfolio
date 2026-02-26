@@ -106,7 +106,7 @@ export function ContentPanel() {
       </div>
 
       {/* Scrollable content */}
-      <div className="flex-1 overflow-y-auto px-8 py-6 scroll-smooth">
+      <div className="flex-1 overflow-y-auto overflow-x-hidden px-8 py-6 scroll-smooth">
         <Suspense
           fallback={
             <div className="flex items-center justify-center h-32">
