@@ -1,73 +1,105 @@
-# React + TypeScript + Vite
+# Joshua Portfolio — Interactive Origami Crane
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+An interactive 3D portfolio built with React, TypeScript, Three.js, and React Three Fiber.
 
-Currently, two official plugins are available:
+The site uses an origami crane as the main navigation model:
+- Click a crane section to open its content panel
+- Drag the crane to move it in 3D space
+- Wings react with velocity-based flapping
+- Japanese + English section hints are shown in the scene
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Live Structure
 
-## React Compiler
+Main app entry points:
+- [`src/main.tsx`](src/main.tsx)
+- [`src/App.tsx`](src/App.tsx)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+3D scene and crane logic:
+- [`src/components/Scene.tsx`](src/components/Scene.tsx)
+- [`src/crane/CraneMesh.tsx`](src/crane/CraneMesh.tsx)
+- [`src/crane/useCraneStore.ts`](src/crane/useCraneStore.ts)
 
-## Expanding the ESLint configuration
+Content panels:
+- [`src/components/ContentPanel.tsx`](src/components/ContentPanel.tsx)
+- [`src/panels/ProjectsPanel.tsx`](src/panels/ProjectsPanel.tsx)
+- [`src/panels/ExperiencePanel.tsx`](src/panels/ExperiencePanel.tsx)
+- [`src/panels/SkillsPanel.tsx`](src/panels/SkillsPanel.tsx)
+- [`src/panels/ResumePanel.tsx`](src/panels/ResumePanel.tsx)
+- [`src/panels/PersonalPanel.tsx`](src/panels/PersonalPanel.tsx)
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+Editable data:
+- [`src/data/projects.ts`](src/data/projects.ts)
+- [`src/data/experience.ts`](src/data/experience.ts)
+- [`src/data/skills.ts`](src/data/skills.ts)
+- [`src/data/personal.ts`](src/data/personal.ts)
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Section Mapping
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+Crane section to panel mapping (see [`PanelContent`](src/components/ContentPanel.tsx:13)):
+- Left Wing → Experience
+- Right Wing → Projects
+- Body → Skills
+- Tail → Personal
+- Head → Resume
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Tech Stack
+
+- React 19
+- TypeScript 5
+- Vite 7
+- Three.js
+- React Three Fiber + Drei
+- GSAP
+- Zustand
+- Tailwind CSS
+
+Dependency source: [`package.json`](package.json)
+
+## Getting Started
+
+### 1) Install dependencies
+
+```bash
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### 2) Run locally
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm run dev
 ```
+
+Then open the local URL shown in terminal (usually `http://localhost:5173`).
+
+### 3) Build for production
+
+```bash
+npm run build
+```
+
+### 4) Preview production build
+
+```bash
+npm run preview
+```
+
+## Scripts
+
+Defined in [`package.json`](package.json:6):
+- `npm run dev` — start Vite dev server
+- `npm run build` — type-check + build
+- `npm run preview` — preview production build
+- `npm run lint` — run ESLint
+
+## Assets
+
+Static public assets are in [`public/`](public/):
+- [`public/crane.stl`](public/crane.stl)
+- [`public/crane-icon.svg`](public/crane-icon.svg)
+- [`public/resume.pdf`](public/resume.pdf)
+
+## Notes
+
+- Theme toggle is hidden while a section panel is open (intentional UX).
+- Portfolio content is data-driven; update the files in [`src/data/`](src/data/) to change projects, experience, skills, and personal links.
+- Architecture notes are documented in [`plans/architecture.md`](plans/architecture.md).
