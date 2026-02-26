@@ -32,6 +32,7 @@ interface CraneStore {
   setIntroComplete: (complete: boolean) => void;
   setPanelVisible: (visible: boolean) => void;
   closePanel: () => void;
+  setTheme: (dark: boolean) => void;
   toggleTheme: () => void;
   setDraggingCrane: (dragging: boolean) => void;
   setDidDragCrane: (didDrag: boolean) => void;
@@ -87,6 +88,8 @@ export const useCraneStore = create<CraneStore>((set) => ({
 
   closePanel: () =>
     set({ panelVisible: false, activeSection: null }),
+
+  setTheme: (dark) => set({ isDark: dark }),
 
   toggleTheme: () =>
     set((s) => ({ isDark: !s.isDark })),
