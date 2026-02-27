@@ -9,18 +9,23 @@ import { ExperiencePanel } from './panels/ExperiencePanel';
 import { SkillsPanel } from './panels/SkillsPanel';
 import { PersonalPanel } from './panels/PersonalPanel';
 import { ResumePanel } from './panels/ResumePanel';
+import { projects } from './data/projects';
 import { useCraneStore } from './crane/useCraneStore';
 
 function StandardWebsiteView() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const sections = [
-    { id: 'section-projects', label: 'Projects' },
     { id: 'section-experience', label: 'Experience' },
-    { id: 'section-skills', label: 'Skills' },
+    { id: 'section-projects', label: 'Projects' },
     { id: 'section-personal', label: 'Personal' },
+    { id: 'section-skills', label: 'Skills' },
     { id: 'section-resume', label: 'Resume' },
   ] as const;
   const [activeLegendId, setActiveLegendId] = useState<(typeof sections)[number]['id']>('section-projects');
+  const [selectedProjectId, setSelectedProjectId] = useState<string>(projects[0]?.id ?? '');
+  const [projectDetailsOpen, setProjectDetailsOpen] = useState(false);
+
+  const selectedProject = projects.find((project) => project.id === selectedProjectId) ?? projects[0];
 
   useEffect(() => {
     const container = scrollRef.current;
@@ -72,33 +77,38 @@ function StandardWebsiteView() {
     target?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
+  const handleSelectProject = (projectId: string) => {
+    setSelectedProjectId(projectId);
+    setProjectDetailsOpen(true);
+  };
+
   return (
     <div ref={scrollRef} className="absolute inset-0 z-10 overflow-y-auto">
-      <div className="max-w-7xl mx-auto px-6 md:px-10 py-24 lg:grid lg:grid-cols-[minmax(0,1fr)_260px] lg:gap-6">
+      <div className="max-w-7xl mx-auto px-6 md:px-10 py-24 lg:grid lg:grid-cols-[minmax(0,1fr)_320px] lg:gap-6">
         <div className="space-y-8 min-w-0">
           <header className="space-y-2">
             <h1 className="font-serif text-3xl md:text-4xl text-ink dark:text-paper-100">Joshua Obljubek</h1>
             <p className="text-sm tracking-[0.2em] uppercase text-ink-muted dark:text-paper-400">Portfolio</p>
           </header>
 
-          <section id="section-projects" className="rounded-2xl border border-paper-200 dark:border-paper-700 bg-paper-50/90 dark:bg-paper-900/80 p-6 md:p-8">
-            <h2 className="font-serif text-2xl mb-4 text-ink dark:text-paper-100">Projects</h2>
-            <ProjectsPanel />
-          </section>
-
           <section id="section-experience" className="rounded-2xl border border-paper-200 dark:border-paper-700 bg-paper-50/90 dark:bg-paper-900/80 p-6 md:p-8">
             <h2 className="font-serif text-2xl mb-4 text-ink dark:text-paper-100">Experience</h2>
             <ExperiencePanel />
           </section>
 
-          <section id="section-skills" className="rounded-2xl border border-paper-200 dark:border-paper-700 bg-paper-50/90 dark:bg-paper-900/80 p-6 md:p-8">
-            <h2 className="font-serif text-2xl mb-4 text-ink dark:text-paper-100">Skills</h2>
-            <SkillsPanel />
+          <section id="section-projects" className="rounded-2xl border border-paper-200 dark:border-paper-700 bg-paper-50/90 dark:bg-paper-900/80 p-6 md:p-8">
+            <h2 className="font-serif text-2xl mb-4 text-ink dark:text-paper-100">Projects</h2>
+            <ProjectsPanel onSelectProject={handleSelectProject} selectedProjectId={selectedProject?.id} />
           </section>
 
           <section id="section-personal" className="rounded-2xl border border-paper-200 dark:border-paper-700 bg-paper-50/90 dark:bg-paper-900/80 p-6 md:p-8">
             <h2 className="font-serif text-2xl mb-4 text-ink dark:text-paper-100">Personal</h2>
             <PersonalPanel />
+          </section>
+
+          <section id="section-skills" className="rounded-2xl border border-paper-200 dark:border-paper-700 bg-paper-50/90 dark:bg-paper-900/80 p-6 md:p-8">
+            <h2 className="font-serif text-2xl mb-4 text-ink dark:text-paper-100">Skills</h2>
+            <SkillsPanel />
           </section>
 
           <section id="section-resume" className="rounded-2xl border border-paper-200 dark:border-paper-700 bg-paper-50/90 dark:bg-paper-900/80 p-6 md:p-8">
@@ -143,27 +153,114 @@ function StandardWebsiteView() {
 
         {/* Section legend / quick-jump (non-overlapping sidebar) */}
         <aside className="hidden lg:block">
-          <div className="sticky top-24 rounded-xl border border-paper-300 dark:border-paper-600 bg-paper-50/95 dark:bg-paper-900/95 backdrop-blur-sm shadow-lg p-2">
-            <p className="px-2 pb-2 text-[10px] uppercase tracking-[0.18em] text-ink-muted dark:text-paper-400 font-sans">Legend</p>
-            <div className="space-y-1">
-              {sections.map((section) => {
-                const active = activeLegendId === section.id;
-                return (
-                  <button
-                    key={section.id}
-                    onClick={() => scrollToSection(section.id)}
-                    className={`w-full text-left px-2.5 py-1.5 rounded-md text-xs font-sans transition-colors ${active
-                      ? 'bg-paper-200 dark:bg-paper-700 text-ink dark:text-paper-100'
-                      : 'text-ink-muted dark:text-paper-300 hover:bg-paper-100 dark:hover:bg-paper-800'}`}
-                  >
-                    {section.label}
-                  </button>
-                );
-              })}
-            </div>
+          <div className="sticky top-24 space-y-4">
+            <section className="rounded-xl border border-paper-300 dark:border-paper-600 bg-paper-50/95 dark:bg-paper-900/95 backdrop-blur-sm shadow-lg p-2">
+              <p className="px-2 pb-2 text-[10px] uppercase tracking-[0.18em] text-ink-muted dark:text-paper-400 font-sans">Legend</p>
+              <div className="space-y-1">
+                {sections.map((section) => {
+                  const active = activeLegendId === section.id;
+                  return (
+                    <button
+                      key={section.id}
+                      onClick={() => scrollToSection(section.id)}
+                      className={`w-full text-left px-2.5 py-1.5 rounded-md text-xs font-sans transition-colors ${active
+                        ? 'bg-paper-200 dark:bg-paper-700 text-ink dark:text-paper-100'
+                        : 'text-ink-muted dark:text-paper-300 hover:bg-paper-100 dark:hover:bg-paper-800'}`}
+                    >
+                      {section.label}
+                    </button>
+                  );
+                })}
+              </div>
+            </section>
           </div>
         </aside>
       </div>
+
+      {/* Project details slide-over */}
+      <>
+        <button
+          type="button"
+          aria-label="Close project details"
+          onClick={() => setProjectDetailsOpen(false)}
+          className={`fixed inset-0 z-30 bg-ink/45 dark:bg-black/55 transition-opacity duration-300 ${projectDetailsOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
+        />
+
+        <aside
+          role="dialog"
+          aria-modal="true"
+          aria-label="Project details"
+          className={`
+            fixed top-0 right-0 z-40 h-full w-full max-w-xl
+            bg-paper-50/95 dark:bg-paper-900/95 backdrop-blur-sm
+            border-l border-paper-300 dark:border-paper-600
+            shadow-2xl shadow-ink/20 dark:shadow-black/40
+            transition-transform duration-300 ease-out
+            ${projectDetailsOpen ? 'translate-x-0' : 'translate-x-full'}
+          `}
+        >
+          <div className="h-full overflow-y-auto p-6 md:p-8">
+            <div className="flex items-center justify-between gap-3 mb-5">
+              <h3 className="font-serif text-2xl text-ink dark:text-paper-100">Project Details</h3>
+              <button
+                onClick={() => setProjectDetailsOpen(false)}
+                aria-label="Close project details"
+                className="
+                  w-9 h-9 rounded-full border border-paper-300 dark:border-paper-600
+                  text-ink-muted dark:text-paper-300
+                  hover:text-ink dark:hover:text-paper-100
+                  hover:border-paper-400 dark:hover:border-paper-500
+                  transition-colors
+                "
+              >
+                ×
+              </button>
+            </div>
+
+            {selectedProject ? (
+              <article className="space-y-4">
+                <div className="flex flex-wrap items-start justify-between gap-3">
+                  <h4 className="font-serif text-xl text-ink dark:text-paper-100">{selectedProject.title}</h4>
+                  <span className="text-xs text-ink-muted dark:text-paper-400 font-mono shrink-0 mt-1">{selectedProject.year}</span>
+                </div>
+
+                <p className="text-sm text-ink-muted dark:text-paper-300 leading-relaxed">
+                  {selectedProject.longDescription ?? selectedProject.description}
+                </p>
+
+                <div className="flex flex-wrap gap-1.5">
+                  {selectedProject.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="text-xs px-2 py-0.5 rounded-full bg-paper-100 text-ink-muted border border-paper-200 dark:bg-paper-700 dark:text-paper-200 dark:border-paper-500"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+
+                <div className="flex flex-wrap gap-3 pt-1">
+                  {selectedProject.url && (
+                    <a href={selectedProject.url} target="_blank" rel="noopener noreferrer" className="text-xs text-accent-crane hover:underline font-sans">
+                      Visit →
+                    </a>
+                  )}
+                  {selectedProject.devpostUrl && (
+                    <a href={selectedProject.devpostUrl} target="_blank" rel="noopener noreferrer" className="text-xs text-accent-crane hover:underline font-sans">
+                      Devpost →
+                    </a>
+                  )}
+                  {selectedProject.githubUrl && (
+                    <a href={selectedProject.githubUrl} target="_blank" rel="noopener noreferrer" className="text-xs text-accent-crane hover:underline font-sans">
+                      GitHub →
+                    </a>
+                  )}
+                </div>
+              </article>
+            ) : null}
+          </div>
+        </aside>
+      </>
     </div>
   );
 }
@@ -173,7 +270,6 @@ function AppShell() {
   const activeSection = useCraneStore((s) => s.activeSection);
   const isDark        = useCraneStore((s) => s.isDark);
   const setTheme      = useCraneStore((s) => s.setTheme);
-  const [settingsOpen, setSettingsOpen] = useState(false);
   const [viewMode, setViewMode] = useState<'crane' | 'standard'>('crane');
 
   return (
@@ -213,126 +309,48 @@ function AppShell() {
         </p>
       </div>
 
-      {/* ── Settings button (hidden while a section panel is open) ── */}
+      {/* ── Quick controls (hidden while a section panel is open) ── */}
       {!activeSection && (
-        <button
-          onClick={() => setSettingsOpen(true)}
-          aria-label="Open settings"
-          className="
-            absolute top-6 right-8 z-20
-            w-9 h-9 flex items-center justify-center
-            rounded-full border
-            border-paper-300 dark:border-paper-700
-            text-ink-muted dark:text-paper-400
-            hover:text-ink dark:hover:text-paper-100
-            hover:border-paper-400 dark:hover:border-paper-500
-            bg-paper-50/80 dark:bg-paper-900/80
-            backdrop-blur-sm
-            transition-all duration-200
-            text-base leading-none
-          "
-        >
-          ⚙
-        </button>
-      )}
-
-      {/* ── Center settings modal ── */}
-      {settingsOpen && (
-        <>
+        <div className="absolute top-6 right-8 z-20 flex items-center gap-2">
           <button
-            className="absolute inset-0 z-30 bg-ink/45 dark:bg-black/55"
-            onClick={() => setSettingsOpen(false)}
-            aria-label="Close settings"
-          />
-
-          <div
-            role="dialog"
-            aria-modal="true"
-            aria-label="Settings"
+            onClick={() => setTheme(!isDark)}
+            aria-label="Toggle theme"
             className="
-              absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-40
-              w-[min(92vw,620px)]
-              rounded-2xl border border-paper-300 dark:border-paper-600
-              bg-paper-50 dark:bg-paper-900
-              shadow-2xl shadow-ink/20 dark:shadow-black/40
-              p-6
+              px-3 h-9 rounded-full border
+              border-paper-300 dark:border-paper-700
+              text-xs font-sans tracking-wide
+              text-ink-muted dark:text-paper-300
+              hover:text-ink dark:hover:text-paper-100
+              hover:border-paper-400 dark:hover:border-paper-500
+              bg-paper-50/80 dark:bg-paper-900/80
+              backdrop-blur-sm
+              transition-all duration-200
             "
           >
-            <div className="flex items-center justify-between mb-5">
-              <h2 className="text-xl font-serif text-ink dark:text-paper-100">Settings</h2>
-              <button
-                onClick={() => setSettingsOpen(false)}
-                aria-label="Close settings"
-                className="
-                  w-8 h-8 rounded-full border border-paper-300 dark:border-paper-600
-                  text-ink-muted dark:text-paper-300
-                  hover:text-ink dark:hover:text-paper-100
-                  hover:border-paper-400 dark:hover:border-paper-500
-                  transition-colors
-                "
-              >
-                ×
-              </button>
-            </div>
+            {isDark ? 'Dark' : 'Light'}
+          </button>
 
-            <div className="rounded-xl border border-paper-200 dark:border-paper-700 overflow-hidden">
-              <div className="px-4 py-3 border-b border-paper-200 dark:border-paper-700 bg-paper-100/70 dark:bg-paper-800/70">
-                <p className="text-sm font-sans text-ink dark:text-paper-100">Appearance</p>
-              </div>
-              <div className="p-4 flex flex-wrap items-center justify-between gap-3">
-                <p className="text-sm text-ink-muted dark:text-paper-300 font-sans">Theme mode</p>
-                <div className="inline-flex rounded-lg border border-paper-300 dark:border-paper-600 overflow-hidden">
-                  <button
-                    onClick={() => setTheme(false)}
-                    className={`px-3 py-1.5 text-sm font-sans transition-colors ${!isDark
-                      ? 'bg-paper-200 text-ink'
-                      : 'bg-transparent text-ink-muted dark:text-paper-400 hover:bg-paper-100 dark:hover:bg-paper-800'}`}
-                  >
-                    Light
-                  </button>
-                  <button
-                    onClick={() => setTheme(true)}
-                    className={`px-3 py-1.5 text-sm font-sans transition-colors ${isDark
-                      ? 'bg-paper-800 text-paper-100'
-                      : 'bg-transparent text-ink-muted dark:text-paper-400 hover:bg-paper-100 dark:hover:bg-paper-800'}`}
-                  >
-                    Dark
-                  </button>
-                </div>
-              </div>
-
-              <div className="px-4 py-3 border-t border-paper-200 dark:border-paper-700 bg-paper-100/40 dark:bg-paper-800/40">
-                <div className="flex flex-wrap items-center justify-between gap-3">
-                  <p className="text-sm text-ink-muted dark:text-paper-300 font-sans">Layout mode</p>
-                  <div className="inline-flex rounded-lg border border-paper-300 dark:border-paper-600 overflow-hidden">
-                    <button
-                      onClick={() => {
-                        setViewMode('crane');
-                        closePanel();
-                      }}
-                      className={`px-3 py-1.5 text-sm font-sans transition-colors ${viewMode === 'crane'
-                        ? 'bg-paper-200 text-ink'
-                        : 'bg-transparent text-ink-muted dark:text-paper-400 hover:bg-paper-100 dark:hover:bg-paper-800'}`}
-                    >
-                      Crane
-                    </button>
-                    <button
-                      onClick={() => {
-                        setViewMode('standard');
-                        closePanel();
-                      }}
-                      className={`px-3 py-1.5 text-sm font-sans transition-colors ${viewMode === 'standard'
-                        ? 'bg-paper-800 text-paper-100'
-                        : 'bg-transparent text-ink-muted dark:text-paper-400 hover:bg-paper-100 dark:hover:bg-paper-800'}`}
-                    >
-                      Standard
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </>
+          <button
+            onClick={() => {
+              setViewMode((prev) => (prev === 'crane' ? 'standard' : 'crane'));
+              closePanel();
+            }}
+            aria-label="Toggle layout"
+            className="
+              px-3 h-9 rounded-full border
+              border-paper-300 dark:border-paper-700
+              text-xs font-sans tracking-wide
+              text-ink-muted dark:text-paper-300
+              hover:text-ink dark:hover:text-paper-100
+              hover:border-paper-400 dark:hover:border-paper-500
+              bg-paper-50/80 dark:bg-paper-900/80
+              backdrop-blur-sm
+              transition-all duration-200
+            "
+          >
+            {viewMode === 'crane' ? 'Crane' : 'Standard'}
+          </button>
+        </div>
       )}
 
       {/* ── Keyboard shortcut hint ── */}

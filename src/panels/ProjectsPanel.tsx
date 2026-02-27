@@ -1,8 +1,25 @@
 import { projects, type Project } from '../data/projects';
 
-function ProjectCard({ project }: { project: Project }) {
+interface ProjectsPanelProps {
+  onSelectProject?: (projectId: string) => void;
+  selectedProjectId?: string;
+}
+
+function ProjectCard({
+  project,
+  onSelectProject,
+  selected,
+}: {
+  project: Project;
+  onSelectProject?: (projectId: string) => void;
+  selected: boolean;
+}) {
   return (
-    <article className="group border border-paper-200 dark:border-paper-600 rounded-lg p-5 hover:border-accent-crane/60 hover:shadow-md transition-all duration-300 bg-white/40 dark:bg-paper-800/65">
+    <article
+      className={`group border rounded-lg p-5 hover:border-accent-crane/60 hover:shadow-md transition-all duration-300 bg-white/40 dark:bg-paper-800/65 ${selected
+        ? 'border-accent-crane/60 shadow-md'
+        : 'border-paper-200 dark:border-paper-600'}`}
+    >
       <div className="flex items-start justify-between gap-3 mb-2">
         <h3 className="font-serif text-lg text-ink dark:text-paper-100 group-hover:text-accent-crane transition-colors">
           {project.title}
@@ -14,20 +31,16 @@ function ProjectCard({ project }: { project: Project }) {
         {project.description}
       </p>
 
-      {/* Tags */}
-      <div className="flex flex-wrap gap-1.5 mb-4">
-        {project.tags.map((tag) => (
-          <span
-            key={tag}
-            className="text-xs px-2 py-0.5 rounded-full bg-paper-100 text-ink-muted border border-paper-200 dark:bg-paper-700 dark:text-paper-200 dark:border-paper-500"
-          >
-            {tag}
-          </span>
-        ))}
-      </div>
-
       {/* Links */}
-      <div className="flex gap-3">
+      <div className="flex flex-wrap gap-3">
+        {onSelectProject && (
+          <button
+            onClick={() => onSelectProject(project.id)}
+            className="text-xs text-accent-crane hover:underline font-sans"
+          >
+            View details ↓
+          </button>
+        )}
         {project.url && (
           <a
             href={project.url}
@@ -63,42 +76,19 @@ function ProjectCard({ project }: { project: Project }) {
   );
 }
 
-export function ProjectsPanel() {
-  const featured = projects.filter((p) => p.featured);
-  const rest      = projects.filter((p) => !p.featured);
-
+export function ProjectsPanel({ onSelectProject, selectedProjectId }: ProjectsPanelProps) {
   return (
     <div className="space-y-6 animate-fade-in">
-      <p className="text-sm text-ink-muted dark:text-paper-300 leading-relaxed font-sans">
-        Things I've built — from hackathon sprints to long-form explorations.
-      </p>
-
-      {featured.length > 0 && (
-        <section>
-          <h3 className="text-xs tracking-[0.2em] uppercase text-ink-muted dark:text-paper-500 font-sans mb-3">
-            Featured
-          </h3>
-          <div className="space-y-3">
-            {featured.map((p) => <ProjectCard key={p.id} project={p} />)}
-          </div>
-        </section>
-      )}
-
-      {rest.length > 0 && (
-        <section>
-          <h3 className="text-xs tracking-[0.2em] uppercase text-ink-muted dark:text-paper-500 font-sans mb-3">
-            More
-          </h3>
-          <div className="space-y-3">
-            {rest.map((p) => <ProjectCard key={p.id} project={p} />)}
-          </div>
-        </section>
-      )}
-
-      {/* Extensibility hint */}
-      <p className="text-xs text-paper-400 dark:text-paper-600 font-mono text-center pt-2">
-        // Add projects in src/data/projects.ts
-      </p>
+      <div className="space-y-3">
+        {projects.map((p) => (
+          <ProjectCard
+            key={p.id}
+            project={p}
+            onSelectProject={onSelectProject}
+            selected={selectedProjectId === p.id}
+          />
+        ))}
+      </div>
     </div>
   );
 }
