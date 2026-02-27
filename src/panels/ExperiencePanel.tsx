@@ -54,7 +54,6 @@ export function ExperiencePanel() {
       {experience.length === 0 ? (
         <div className="text-center py-12 text-ink-muted dark:text-paper-300">
           <p className="font-serif text-lg mb-2 dark:text-paper-100">Coming soon</p>
-          <p className="text-xs font-mono text-paper-400 dark:text-paper-600">// Add entries in src/data/experience.ts</p>
         </div>
       ) : (
         <div className="mt-4">

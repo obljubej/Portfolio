@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { projects, type Project } from '../data/projects';
 
 interface ProjectsPanelProps {
@@ -14,6 +15,9 @@ function ProjectCard({
   onSelectProject?: (projectId: string) => void;
   selected: boolean;
 }) {
+  const [expanded, setExpanded] = useState(false);
+  const canExpand = !onSelectProject && Boolean(project.longDescription);
+
   return (
     <article
       className={`group border rounded-lg p-5 hover:border-accent-crane/60 hover:shadow-md transition-all duration-300 bg-white/40 dark:bg-paper-800/65 ${selected
@@ -31,8 +35,22 @@ function ProjectCard({
         {project.description}
       </p>
 
+      {canExpand && expanded && (
+        <p className="text-sm text-ink-muted dark:text-paper-300 leading-relaxed mb-4 border-l-2 border-paper-200 dark:border-paper-600 pl-3">
+          {project.longDescription}
+        </p>
+      )}
+
       {/* Links */}
       <div className="flex flex-wrap gap-3">
+        {canExpand && (
+          <button
+            onClick={() => setExpanded((v) => !v)}
+            className="text-xs text-accent-crane hover:underline font-sans"
+          >
+            {expanded ? 'Hide details ↑' : 'Read more ↓'}
+          </button>
+        )}
         {onSelectProject && (
           <button
             onClick={() => onSelectProject(project.id)}

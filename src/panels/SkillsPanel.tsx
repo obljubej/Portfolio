@@ -3,10 +3,6 @@ import { skillGroups } from '../data/skills';
 export function SkillsPanel() {
   return (
     <div className="space-y-6 animate-fade-in">
-      <p className="text-sm text-ink-muted dark:text-paper-300 leading-relaxed font-sans">
-        Tools and technologies I reach for when building things.
-      </p>
-
       {skillGroups.map((group) => (
         <section key={group.category}>
           <h3 className="text-xs tracking-[0.2em] uppercase text-ink-muted dark:text-paper-500 font-sans mb-3 flex items-center gap-2">
@@ -36,9 +32,6 @@ export function SkillsPanel() {
         </section>
       ))}
 
-      <p className="text-xs text-paper-400 dark:text-paper-600 font-mono text-center pt-2">
-        // Add skills in src/data/skills.ts
-      </p>
     </div>
   );
 }

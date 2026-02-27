@@ -29,12 +29,4 @@ export const personalInfo: PersonalInfo = {
 };
 
 export const origamiWorks: OrigamiWork[] = [
-  // ── Add origami works here ──────────────────────────────────────────────────
-  // {
-  //   id: 'crane-series',
-  //   title: 'Crane Series',
-  //   description: 'A series of modular origami cranes exploring symmetry and recursion.',
-  //   year: 2024,
-  //   tags: ['Modular', 'Crane', 'Symmetry'],
-  // },
 ];

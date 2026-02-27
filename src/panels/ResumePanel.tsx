@@ -6,10 +6,6 @@ const RESUME_PATH = '/resume.pdf';
 export function ResumePanel() {
   return (
     <div className="space-y-6 animate-fade-in">
-      <p className="text-sm text-ink-muted leading-relaxed font-sans">
-        A two-page overview of my experience, education, and projects.
-      </p>
-
       {/* Inline PDF viewer */}
       <div className="rounded-lg overflow-hidden border border-paper-300 dark:border-paper-500 shadow-sm bg-white dark:bg-paper-100">
         <iframe

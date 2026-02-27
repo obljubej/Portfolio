@@ -96,9 +96,6 @@ export function PersonalPanel() {
           <p className="text-sm text-ink-muted mb-4">
             A space for paper folding — crease patterns, models, and explorations.
           </p>
-          <p className="text-xs font-mono text-paper-400">
-            // Add origami works in src/data/personal.ts
-          </p>
         </div>
       ) : (
         <div className="grid gap-3">
