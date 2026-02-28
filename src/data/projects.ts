@@ -20,6 +20,7 @@ export const projects: Project[] = [
     longDescription:
       'Building a geometric constraint engine that computes fold constructions to approximate any target coordinate (x, y) on a square sheet. The system supports tolerance bounds (e.g., ±0.5%) and “don’t-care” axes to reduce fold complexity. The goal is to minimize the number of folds required while maintaining spatial accuracy, forming a foundation for computational origami tooling and automated crease-sequence synthesis.',
     tags: ['Python', 'Computational Geometry', 'Optimization', 'Algorithms', 'Origami'],
+    url: 'https://obljubej.github.io/Origami-Reference-Finder/',
     githubUrl: 'https://github.com/obljubej/Origami-Reference-Finder',
     year: 2026,
   },

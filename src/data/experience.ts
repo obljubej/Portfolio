@@ -13,7 +13,7 @@ export interface ExperienceItem {
 export const experience: ExperienceItem[] = [
   {
     id: 'exp-amd-incoming',
-    role: 'Silicon Design Engineer (Incoming)',
+    role: 'Silicon Design Engineer Intern (Incoming)',
     company: 'AMD',
     location: 'Markham, ON',
     startDate: 'May 2026',
