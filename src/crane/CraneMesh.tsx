@@ -402,8 +402,6 @@ function CraneModel() {
       onPointerMove={(e: ThreeEvent<PointerEvent>) => {
         if (!isDraggingCrane || !craneRootRef.current || !lastPointerRef.current) return;
 
-        const dx = e.clientX - lastPointerRef.current.x;
-        const dy = e.clientY - lastPointerRef.current.y;
         lastPointerRef.current = { x: e.clientX, y: e.clientY };
 
         // Drag in a camera-facing plane for stable movement after camera rotation.
