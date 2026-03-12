@@ -1,7 +1,7 @@
 // Resume PDF is served from the public directory.
 // Copy Data/resume_updated.pdf → portfolio/public/resume.pdf
-// (or update RESUME_PATH below to match your setup)
-const RESUME_PATH = '/resume.pdf';
+// Use BASE_URL so it works in GitHub Pages project paths.
+const RESUME_PATH = `${import.meta.env.BASE_URL}resume.pdf`;
 
 export function ResumePanel() {
   return (

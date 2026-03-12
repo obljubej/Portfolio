@@ -290,7 +290,7 @@ function CraneModel() {
   const worldUpRef = useRef(new THREE.Vector3());
   const worldQuatRef = useRef(new THREE.Quaternion());
   const deltaWorldRef = useRef(new THREE.Vector3());
-  const rawGeo       = useLoader(STLLoader, '/crane.stl');
+  const rawGeo       = useLoader(STLLoader, `${import.meta.env.BASE_URL}crane.stl`);
 
   const activeSection    = useCraneStore((s) => s.activeSection);
   const setIntroComplete = useCraneStore((s) => s.setIntroComplete);
