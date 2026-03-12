@@ -98,7 +98,7 @@ export const experience: ExperienceItem[] = [
   {
     id: 'exp-origami-canada',
     role: 'Senior Instructor / Executive Team',
-    company: 'Origami Canada / Origami Society of Toronto',
+    company: 'Origami Canada',
     location: 'Toronto, ON',
     startDate: '2018',
     endDate: 'Present',

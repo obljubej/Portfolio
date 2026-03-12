@@ -270,7 +270,7 @@ function AppShell() {
   const activeSection = useCraneStore((s) => s.activeSection);
   const isDark        = useCraneStore((s) => s.isDark);
   const setTheme      = useCraneStore((s) => s.setTheme);
-  const [viewMode, setViewMode] = useState<'crane' | 'standard'>('crane');
+  const [viewMode, setViewMode] = useState<'crane' | 'standard'>('standard');
 
   return (
     <div className={`relative w-full h-screen overflow-hidden select-none transition-colors duration-300 ${isDark ? 'dark bg-paper-900' : 'bg-paper-200'}`}>
@@ -349,6 +349,33 @@ function AppShell() {
             "
           >
             {viewMode === 'crane' ? 'Crane' : 'Standard'}
+          </button>
+        </div>
+      )}
+
+      {/* ── Prompt users in standard mode to try crane mode ── */}
+      {viewMode === 'standard' && (
+        <div className="absolute top-20 right-8 z-20">
+          <button
+            onClick={() => {
+              setViewMode('crane');
+              closePanel();
+            }}
+            aria-label="Switch to crane mode"
+            className="
+              inline-flex items-center gap-2
+              px-4 py-2 rounded-full border
+              border-accent-crane/40
+              text-xs md:text-sm font-sans tracking-wide
+              text-accent-crane
+              bg-paper-50/90 dark:bg-paper-900/90
+              hover:bg-accent-crane/10
+              shadow-md backdrop-blur-sm
+              transition-all duration-200
+            "
+          >
+            <span className="text-lg leading-none" aria-hidden="true">↗</span>
+            <span>Try the interactive crane</span>
           </button>
         </div>
       )}
